@@ -6,6 +6,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -14,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
     TextView mTextSensor;
     SensorManager sensorMrg;
     List<Sensor> sensorList;
+    Button button;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,15 +26,20 @@ public class MainActivity extends AppCompatActivity {
 
         mTextSensor = findViewById(R.id.textSensor);
         //mTextSensor.setMovementMethod(new ScrollingMovementMethod());
+        button = findViewById(R.id.retrive_sensors_btn);
 
-        sensorMrg = (SensorManager) getSystemService(SENSOR_SERVICE);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sensorMrg = (SensorManager) getSystemService(SENSOR_SERVICE);
+                sensorList = sensorMrg.getSensorList(Sensor.TYPE_ALL);
 
-        sensorList = sensorMrg.getSensorList(Sensor.TYPE_ALL);
-
-        mTextSensor.append("# Sensors:" + sensorList.size() + ") \n \n" );
-        for(Sensor sensor : sensorList) {
-            mTextSensor.append("Sensor name:" + sensor.getName()  + " \n");
-            mTextSensor.append("Sensor type:" + sensor.getType()  + " \n\n");
-        }
+                mTextSensor.append("# Sensors:" + sensorList.size() + ") \n \n" );
+                for(Sensor sensor : sensorList) {
+                    mTextSensor.append("Sensor name:" + sensor.getName()  + " \n");
+                    mTextSensor.append("Sensor type:" + sensor.getType()  + " \n\n");
+                }
+            }
+        });
     }
 }
